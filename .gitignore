@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Builds and caches
+dist/
+.next/
+out/
+.turbo/
+*.tsbuildinfo
+
+# Tests
+coverage/
+playwright-report/
+test-results/
+
+# Local config
+.env
+.env.*
+!.env.example
+
+# OS and editors
+.DS_Store
+*.log
