@@ -62,7 +62,7 @@ The cookie follows the account:
 - Validation messages are translated the same way, into `details.fields`.
 - The worker has no request, so it reads `users.locale` for each recipient. An invitation to someone without an account uses the inviter's locale.
 
-> ⚠️ **Verify at init:** check that the current `nestjs-i18n` release declares NestJS 11 as a peer dependency. If it doesn't, the fallback is a small interceptor around `i18next`, with the same header and catalogues.
+> ⚠️ **Verify at init:** check that the current `nestjs-i18n` release accepts NestJS 12 as a peer dependency. If it doesn't, the fallback is a small interceptor around `i18next`, with the same header and catalogues.
 
 ---
 

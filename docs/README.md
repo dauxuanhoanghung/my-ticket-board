@@ -29,4 +29,4 @@ A Trello-style Kanban collaboration app. **Status: pre-implementation.** These d
 
 ## Tech stack (fixed by requirements)
 
-NestJS (TypeScript, DDD, GraphQL + HTTP, TypeORM, Jest) · Next.js App Router as BFF (GraphQL to the API, Playwright) · Tailwind + shadcn/ui in a shared package · dnd-kit · PostgreSQL · Redis / Valkey / Memcached behind a cache Facade · email behind a delivery Facade · RabbitMQ · RustFS (S3-compatible) · SSE for realtime · i18n with next-intl and nestjs-i18n · Docker Compose · Turborepo.
+NestJS (TypeScript, DDD, GraphQL + HTTP, TypeORM, Vitest) · Next.js App Router as BFF (GraphQL to the API, Playwright) · Tailwind + shadcn/ui in a shared package · dnd-kit · PostgreSQL · Redis / Valkey / Memcached behind a cache Facade · email behind a delivery Facade · RabbitMQ · RustFS (S3-compatible) · SSE for realtime · i18n with next-intl and nestjs-i18n · oxlint · Docker Compose · Turborepo.

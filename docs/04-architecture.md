@@ -74,7 +74,7 @@ my-ticket-board/
 │  ├─ ui/                          # shadcn/ui components, Tailwind theme, global CSS (@tb/ui)
 │  ├─ ordering/                    # fractional-index helpers (same algorithm on client and server)
 │  ├─ tsconfig/                    # base tsconfig presets
-│  └─ eslint-config/               # shared lint rules (incl. import boundaries)
+│  └─ oxlint-config/               # reusable oxlint presets: base, nest, react, next
 ├─ infra/
 │  ├─ postgres/init/               # extensions bootstrap
 │  ├─ rustfs/                      # bucket + CORS bootstrap script
@@ -123,7 +123,7 @@ my-ticket-board/
 
 **Diagram →** [Backend layering](./diagrams/architecture/04-backend-layering.md)
 
-**Rules (enforced by ESLint import boundaries):**
+**Rules (enforced by oxlint import rules, [ADR-029](./11-decisions.md#adr-029)):**
 
 1. `domain/` imports nothing from Nest, the ORM, `application/`, `infrastructure/` or another context.
 2. `application/` depends on `domain/` and on **ports** (interfaces). Never on concrete infrastructure.
@@ -272,7 +272,8 @@ src/app/
 | **Rate limiting** | `CacheFacade.increment` fixed-window counters on auth mutations and uploads |
 | **GraphQL hardening** | Depth/complexity limits, introspection off in prod, persisted operations allowlist on the BFF proxy |
 | **i18n** | `nestjs-i18n` on the API, locale taken from `Accept-Language`. Domain errors carry codes, and translation happens in the exception filter ([12 · Internationalisation](./12-internationalisation.md)) |
-| **Testing** | Jest (NestJS default) for the API and packages. Domain: pure unit tests. Application: in-memory repos. Infrastructure: Testcontainers (Postgres, RabbitMQ). HTTP and GraphQL: Supertest. Web: Playwright ([ADR-020](./11-decisions.md#adr-020)) |
+| **Testing** | Vitest (NestJS default) for the API and packages. Domain: pure unit tests. Application: in-memory repos. Infrastructure: Testcontainers (Postgres, RabbitMQ). HTTP and GraphQL: Supertest. Web: Playwright ([ADR-028](./11-decisions.md#adr-028)) |
+| **Linting** | oxlint (NestJS default) in every workspace, including the import boundaries of §4.2 ([ADR-029](./11-decisions.md#adr-029)) |
 
 ---
 

@@ -24,7 +24,7 @@
 | [017](#adr-017) | Tailwind + shadcn/ui in a shared `@tb/ui` package | Accepted |
 | [018](#adr-018) | dnd-kit for drag and drop | Accepted |
 | [019](#adr-019) | One set of codegen documents, server and browser GraphQL clients | Accepted |
-| [020](#adr-020) | Jest for the API and packages, Playwright for the web app | Accepted |
+| [020](#adr-020) | Jest for the API and packages, Playwright for the web app | Accepted, Jest part superseded by [028](#adr-028) |
 | [021](#adr-021) | Outbound messages behind a `DeliveryFacade` | Accepted, SMS part superseded by [025](#adr-025) |
 | [022](#adr-022) | Step-by-step scope: no public boards or OAuth in the MVP | Accepted |
 | [023](#adr-023) | i18n: cookie on the web, `Accept-Language` to the API | Accepted |
@@ -32,6 +32,8 @@
 | [025](#adr-025) | Email is the only delivery channel for now | Accepted |
 | [026](#adr-026) | SSE stays behind the BFF, with its own process as the scale path | Accepted |
 | [027](#adr-027) | File uploads: presigned PUT between two GraphQL mutations | Accepted |
+| [028](#adr-028) | Vitest + Supertest for the API and packages | Accepted |
+| [029](#adr-029) | oxlint for every workspace | Accepted |
 
 ---
 
@@ -164,7 +166,7 @@
 - **Consequences:** The same query can prefetch on the server and hydrate in the browser, fully typed. The `server-only` import stops the server client from reaching the browser bundle.
 
 <a id="adr-020"></a>
-### ADR-020 · Jest for the API and packages, Playwright for the web app — Accepted
+### ADR-020 · Jest for the API and packages, Playwright for the web app — Accepted, Jest part superseded by ADR-028
 
 - **Decision:** The API uses NestJS's default test setup: Jest, `@nestjs/testing` and Supertest, plus Testcontainers for infrastructure tests. Shared packages use Jest too. The web app uses Playwright.
 - **Consequences:** Replaces the earlier Vitest recommendation. The web app has no separate component-test layer, so UI behaviour is covered through Playwright.
@@ -246,6 +248,20 @@
 - **Why not S3 multipart yet:** The limit is 25 MB, and S3's guidance starts at 100 MB. [13 §11](./13-file-uploads.md#11-later-larger-files) sketches the later design.
 - **Consequences:** Three calls per upload, and `pending` rows need GC. A file uploaded but never confirmed is lost after an hour. Avatar and logo results arrive by SSE rather than in the mutation response. Details are in [13 · File uploads](./13-file-uploads.md).
 
+<a id="adr-028"></a>
+### ADR-028 · Vitest + Supertest for the API and packages — Accepted
+
+- **Context:** The NestJS 12 starter ships Vitest and Supertest instead of Jest.
+- **Decision:** This supersedes the Jest part of [ADR-020](#adr-020). The API and the shared packages use Vitest. The API also uses `@nestjs/testing`, Supertest for HTTP and GraphQL, and Testcontainers for infrastructure tests. The web app keeps Playwright.
+- **Consequences:** The test layers don't change: pure domain tests, application tests with in-memory repositories, Testcontainers for infrastructure and Supertest at the edge. The exact Vitest setup is settled during implementation.
+
+<a id="adr-029"></a>
+### ADR-029 · oxlint for every workspace — Accepted
+
+- **Context:** The NestJS 12 starter lints with oxlint instead of ESLint. [ADR-002](#adr-002) makes import-boundary linting mandatory.
+- **Decision:** `apps/api`, `apps/web` and `packages/*` all lint with oxlint. The import boundaries in [04 §4.2](./04-architecture.md#42-layering-and-dependency-rule) are enforced with oxlint's built-in `no-restricted-imports` rule. The web app uses oxlint's React and Next.js plugins instead of `eslint-config-next`.
+- **Consequences:** One linter across the repo. The exact configuration is settled during implementation. If a rule that only ESLint has becomes necessary, ESLint can run next to oxlint with `eslint-plugin-oxlint`, which turns off the rules oxlint already checks. Record that in a new ADR.
+
 ---
 
 ## Resolved questions
@@ -256,7 +272,7 @@
 | Q2 | UI kit | Tailwind + shadcn/ui in `packages/ui` | [017](#adr-017) |
 | Q3 | Drag and drop | dnd-kit | [018](#adr-018) |
 | Q4 | Client GraphQL layer | `graphql-codegen` with server and browser clients, TanStack Query in the browser | [019](#adr-019) |
-| Q5 | Test runner | Jest for the API and packages, Playwright for the web app | [020](#adr-020) |
+| Q5 | Test runner | Vitest + Supertest for the API and packages (replaced Jest), Playwright for the web app | [020](#adr-020), [028](#adr-028) |
 | Q6 | Email / SMS provider | `DeliveryFacade`. Mailpit for local testing | [021](#adr-021) |
 | Q7 | Public boards in the MVP? | No, added step by step later | [022](#adr-022) |
 | Q8 | Production hosting | None for now. Docker, then Kubernetes later | [024](#adr-024) |
@@ -268,6 +284,7 @@
 | Q14 | Confirm ADR-004, 005 and 011? | Yes, all three accepted | [004](#adr-004), [005](#adr-005), [011](#adr-011) |
 | Q15 | Can streams bypass the BFF? | Not in the MVP. Never directly to the API. A separate `realtime` process is the scale path | [026](#adr-026) |
 | Q16 | Confirm ADR-009? | Yes, because uploads can take too long to route through Node | [009](#adr-009), [027](#adr-027) |
+| Q17 | ESLint, oxlint or both? | oxlint everywhere. ESLint can join later through `eslint-plugin-oxlint` | [029](#adr-029) |
 
 ---
 
@@ -280,4 +297,4 @@
 | RustFS rejects a PUT that differs from the signed size or type | The HEAD check at confirm remains the safety net |
 | A presigned PUT that starts before expiry can finish after it on RustFS | Raise the TTL |
 | RustFS honours `response-content-disposition` with UTF-8 file names | Sign `Content-Disposition` at upload time |
-| The current `nestjs-i18n` release declares NestJS 11 as a peer dependency | Small interceptor around `i18next`, same header and catalogues |
+| The current `nestjs-i18n` release accepts NestJS 12 as a peer dependency | Small interceptor around `i18next`, same header and catalogues |

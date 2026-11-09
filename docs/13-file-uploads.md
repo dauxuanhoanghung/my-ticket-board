@@ -420,8 +420,8 @@ These RustFS checks run in CI against the pinned image, because the compatibilit
 
 | Layer | Tests |
 |---|---|
-| Domain (Jest) | Size and type limits, state changes, the HEAD comparison |
-| Application (Jest) | Idempotent request, racing confirms, permission lost before confirm, with in-memory repositories |
+| Domain (Vitest) | Size and type limits, state changes, the HEAD comparison |
+| Application (Vitest) | Idempotent request, racing confirms, permission lost before confirm, with in-memory repositories |
 | GraphQL (Supertest) | Both mutations, error codes, `upload: null` |
 | Web (Playwright) | Progress, cancel, retry through `page.route`, oversize message, a Vietnamese file name, the second tab seeing the attachment |
 

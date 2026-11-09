@@ -1,0 +1,5 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "extends": ["./node_modules/@tb/oxlint-config/next.json"],
+  "ignorePatterns": ["src/gql/**"]
+}

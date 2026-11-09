@@ -420,7 +420,7 @@ s3api put-bucket-policy --bucket tb-public --policy '{
 `apps/api/Dockerfile` sketch (the web image follows the same pattern, with `next build` and `output: 'standalone'`):
 
 ```dockerfile
-FROM node:24-alpine AS base
+FROM node:22-alpine AS base
 RUN corepack enable
 WORKDIR /repo
 
@@ -441,7 +441,7 @@ COPY --from=pruner /repo/out/full/ .
 RUN pnpm turbo run build --filter=@tb/api... \
  && pnpm --filter @tb/api deploy --prod /out
 
-FROM node:24-alpine AS runtime
+FROM node:22-alpine AS runtime
 ENV NODE_ENV=production
 USER node
 WORKDIR /app
@@ -495,7 +495,7 @@ export class DeliveryFacade {
 | Driver | Use | Status |
 |---|---|---|
 | `smtp` | Mailpit locally, any SMTP relay in production | MVP |
-| `memory` | Jest tests | MVP |
+| `memory` | Vitest tests | MVP |
 | `ses` | Amazon SES | Later |
 
 **Testing in Docker:** Mailpit catches all email. Its web inbox is at `http://localhost:8025`, and Playwright can read verification and invitation links through Mailpit's REST API.

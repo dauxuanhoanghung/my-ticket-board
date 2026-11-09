@@ -6,9 +6,9 @@
 flowchart LR
   pr["Push / pull request"] --> install["pnpm install<br/>(store cached)"]
   install --> lint["lint + typecheck<br/>turbo --affected"]
-  install --> unit["Jest unit tests<br/>domain + application"]
+  install --> unit["Vitest unit tests<br/>domain + application"]
   install --> schema["schema drift check<br/>api:schema vs committed"]
-  lint --> integ["Jest integration tests<br/>Testcontainers: Postgres 18,<br/>RabbitMQ 4, Valkey"]
+  lint --> integ["Vitest integration tests<br/>Testcontainers: Postgres 18,<br/>RabbitMQ 4, Valkey"]
   unit --> integ
   schema --> build["build images<br/>turbo prune, multi-stage"]
   integ --> build

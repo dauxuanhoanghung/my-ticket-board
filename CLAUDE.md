@@ -30,7 +30,8 @@ Scope grows step by step: boards are private or workspace-visible, and login is 
 | Realtime | SSE, proxied by the BFF. RabbitMQ is the cross-instance backplane |
 | Outbound messages | Email **only** through `DeliveryFacade`. Mailpit in development |
 | i18n | `en` and `vi`. `next-intl` (cookie `tb_locale`) and `nestjs-i18n` (`Accept-Language` set by the BFF) |
-| Tests | Jest (NestJS default) for the API and packages, Playwright for the web app |
+| Tests | Vitest + Supertest (NestJS default) for the API and packages, Playwright for the web app |
+| Lint | oxlint (NestJS default) in every workspace, including the import-boundary rules |
 | Dev env | Docker Compose (`compose.yml`), profiles for cache backend and apps |
 
 ## Repository layout (planned)
@@ -41,7 +42,7 @@ apps/web/        Next.js BFF: src/app/, src/features/, src/lib/, src/proxy.ts
 packages/contracts/   realtime event types + reducers, shared enums/zod schemas, supported locales
 packages/ui/          shadcn/ui components and Tailwind theme, no data fetching or hard-coded strings
 packages/ordering/    fractional-index helpers (same keys on client and server)
-packages/tsconfig/, packages/eslint-config/
+packages/tsconfig/, packages/oxlint-config/
 infra/           postgres init SQL, rustfs bucket script, rabbitmq definitions
 docs/            design docs; diagrams in docs/diagrams/<type>/
 ```
@@ -101,7 +102,7 @@ pnpm test:e2e
 - **GraphQL mutations:** `verbNoun(input: VerbNounInput!): VerbNounPayload!`, optional `clientMutationId`. Errors use the codes in [docs/09 §3](docs/09-api-contract.md#3-error-model).
 - **DB:** `text + CHECK` instead of PG enums. `timestamptz`. Forward-only migrations. Advanced constraints in handwritten SQL.
 - **Time:** UTC everywhere. Inject a `Clock` port in domain/application code.
-- **Tests:** Jest for the API and packages: domain = pure unit tests, application = in-memory repos, infrastructure = Testcontainers, HTTP and GraphQL = Supertest. Web = Playwright.
+- **Tests:** Vitest for the API and packages: domain = pure unit tests, application = in-memory repos, infrastructure = Testcontainers, HTTP and GraphQL = Supertest. Web = Playwright.
 - **Commits:** Conventional Commits (`feat(board): …`, `fix(api): …`).
 
 ## Documentation rules

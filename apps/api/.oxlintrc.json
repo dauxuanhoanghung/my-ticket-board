@@ -1,0 +1,69 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "extends": ["./node_modules/@tb/oxlint-config/nest.json"],
+  "overrides": [
+    {
+      "files": ["src/modules/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "**/identity/domain/**",
+                  "**/identity/infrastructure/**",
+                  "**/workspace/domain/**",
+                  "**/workspace/infrastructure/**",
+                  "**/board/domain/**",
+                  "**/board/infrastructure/**",
+                  "**/collaboration/domain/**",
+                  "**/collaboration/infrastructure/**",
+                  "**/storage/domain/**",
+                  "**/storage/infrastructure/**",
+                  "**/notification/domain/**",
+                  "**/notification/infrastructure/**",
+                  "**/realtime/domain/**",
+                  "**/realtime/infrastructure/**"
+                ],
+                "message": "Cross-context import: use an integration event or an ACL port (CLAUDE.md rule 3)"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/modules/*/domain/**/*.ts", "src/shared/kernel/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["@nestjs/*", "typeorm", "pg"],
+                "message": "domain/ is plain TypeScript (CLAUDE.md rule 2)"
+              },
+              {
+                "group": ["**/application/**", "**/infrastructure/**", "**/interface/**"],
+                "message": "domain/ imports no outer layer (CLAUDE.md rule 2)"
+              },
+              {
+                "group": [
+                  "**/identity/domain/**",
+                  "**/workspace/domain/**",
+                  "**/board/domain/**",
+                  "**/collaboration/domain/**",
+                  "**/storage/domain/**",
+                  "**/notification/domain/**",
+                  "**/realtime/domain/**"
+                ],
+                "message": "Cross-context import: use an integration event or an ACL port (CLAUDE.md rule 3)"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

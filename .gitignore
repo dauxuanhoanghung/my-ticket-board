@@ -19,6 +19,9 @@ test-results/
 .env.*
 !.env.example
 
-# OS and editors
+# Misc
 .DS_Store
 *.log
+*.pem
+
+tmp/
