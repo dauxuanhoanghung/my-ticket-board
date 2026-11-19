@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  // Type-checks the specs together with the code they test. The root tsconfig.json
+  // excludes test/ so that `nest build` never emits specs into dist/.
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "..",
+    "noEmit": true,
+    "incremental": false,
+    "types": ["node", "vitest/globals"]
+  },
+  "include": ["../src/**/*.ts", "./**/*.ts"],
+  // Override the inherited exclude, which lists "test" and would drop this folder.
+  "exclude": []
+}

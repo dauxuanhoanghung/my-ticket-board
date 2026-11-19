@@ -64,6 +64,48 @@
           }
         ]
       }
+    },
+    {
+      "files": ["src/modules/*/application/**/*.ts", "src/shared/application/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "typeorm",
+                  "pg",
+                  "@nestjs/typeorm",
+                  "@nestjs/graphql",
+                  "@nestjs/apollo",
+                  "graphql",
+                  "amqplib",
+                  "@aws-sdk/*",
+                  "nodemailer"
+                ],
+                "message": "application/ depends on ports, not on drivers (CLAUDE.md rule 2)"
+              },
+              {
+                "group": ["**/infrastructure/**", "**/interface/**"],
+                "message": "application/ imports no outer layer (CLAUDE.md rule 2)"
+              },
+              {
+                "group": [
+                  "**/identity/domain/**",
+                  "**/workspace/domain/**",
+                  "**/board/domain/**",
+                  "**/collaboration/domain/**",
+                  "**/storage/domain/**",
+                  "**/notification/domain/**",
+                  "**/realtime/domain/**"
+                ],
+                "message": "Cross-context import: use an integration event or an ACL port (CLAUDE.md rule 3)"
+              }
+            ]
+          }
+        ]
+      }
     }
   ]
 }
